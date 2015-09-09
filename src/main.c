@@ -9,14 +9,13 @@
 #include <stdlib.h>
 #include "diag/Trace.h"
 #include "stm32f4xx.h"
-//#include "stm32f4xx_hal.h"
 
 // ----------------------------------------------------------------------------
 //
-// Standalone STM32F4 empty sample (trace via NONE).
+// Standalone STM32F4 empty sample (trace via DEBUG).
 //
 // Trace support is enabled by adding the TRACE macro definition.
-// By default the trace messages are forwarded to the NONE output,
+// By default the trace messages are forwarded to the DEBUG output,
 // but can be rerouted to any device or completely suppressed, by
 // changing the definitions required in system/src/diag/trace_impl.c
 // (currently OS_USE_TRACE_ITM, OS_USE_TRACE_SEMIHOSTING_DEBUG/_STDOUT).

@@ -35,6 +35,15 @@ main(int argc, char* argv[])
 {
   // At this stage the system clock should have already been configured
   // at high speed.
+  trace_printf("System clock: %u Hz\n", SystemCoreClock);
+
+  uint32_t PCLK1CLK, PCLK2CLK;
+  PCLK1CLK = HAL_RCC_GetPCLK1Freq();
+  PCLK2CLK = HAL_RCC_GetPCLK2Freq();
+
+  trace_printf("PCLK1  clock: %u Hz\n", PCLK1CLK);
+  trace_printf("PCLK2  clock: %u Hz\n", PCLK2CLK);
+
   GPIO_InitTypeDef GPIO_InitStructure;
 
   // Enable GPIO Peripheral clock
@@ -48,7 +57,6 @@ main(int argc, char* argv[])
   HAL_GPIO_Init(GPIOA, &GPIO_InitStructure);
 
   // Set timer frequency to 1000 Hz. 1 tick = 1 ms
-  trace_printf("System clock: %u Hz\n", SystemCoreClock);
   SysTick_Config (SystemCoreClock / 1000u);
 
   // Infinite loop

@@ -30,9 +30,18 @@
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
+/* Private function prototypes -----------------------------------------------*/
+static void Error_Handler(void);
+
 int
 main(int argc, char* argv[])
 {
+  if(HAL_Init()!= HAL_OK)
+  {
+    /* Start Conversation Error */
+    Error_Handler();
+  }
+
   // At this stage the system clock should have already been configured
   // at high speed.
   trace_printf("System clock: %u Hz\n", SystemCoreClock);
@@ -46,7 +55,7 @@ main(int argc, char* argv[])
 
   GPIO_InitTypeDef GPIO_InitStructure;
 
-  // Enable GPIO Peripheral clock
+  // Enable GPIOA Peripheral clock
   RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
 
   // Configure pin in output push/pull mode
@@ -56,24 +65,37 @@ main(int argc, char* argv[])
   GPIO_InitStructure.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-  // Set timer frequency to 1000 Hz. 1 tick = 1 ms
-  SysTick_Config (SystemCoreClock / 1000u);
+  // Enable GPIOC Peripheral clock
+  RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
 
-  // Infinite loop
+  // Configure pin in input push/pull mode
+  GPIO_InitStructure.Pin = GPIO_PIN_13;
+  GPIO_InitStructure.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStructure.Speed = GPIO_SPEED_FAST;
+  GPIO_InitStructure.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStructure);
+
+ // Infinite loop
   while (1)
     {
-      // Turn GPIOA PIN_5 ON
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+      if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == 0)
+      {
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 
-      /* Insert delay 1000 ms */
-      HAL_Delay(100);
+        /* Insert delay 1000 ms */
+        HAL_Delay(1000);
 
-      // Turn GPIOA PIN_5 ON
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+      }
 
-      /* Insert delay 1000 ms */
-      HAL_Delay(900);
     }
+}
+
+static void Error_Handler(void)
+{
+  while(1)
+  {
+  }
 }
 
 #pragma GCC diagnostic pop

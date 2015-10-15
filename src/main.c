@@ -56,7 +56,7 @@ main(int argc, char* argv[])
   GPIO_InitTypeDef GPIO_InitStructure;
 
   // Enable GPIOA Peripheral clock
-  RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
+  __GPIOA_CLK_ENABLE();;
 
   // Configure pin in output push/pull mode
   GPIO_InitStructure.Pin = GPIO_PIN_5;
@@ -66,7 +66,7 @@ main(int argc, char* argv[])
   HAL_GPIO_Init(GPIOA, &GPIO_InitStructure);
 
   // Enable GPIOC Peripheral clock
-  RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
+  __GPIOC_CLK_ENABLE();;
 
   // Configure pin in input push/pull mode
   GPIO_InitStructure.Pin = GPIO_PIN_13;
